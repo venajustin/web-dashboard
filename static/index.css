@@ -1,0 +1,47 @@
+body {
+    background-color: #1c1b22;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.center-horizontal {
+    display:flex;
+    justify-content:center;
+}
+
+.resizing-box {
+    display:flex;
+    max-width: 1200px;
+    width:100%;
+    margin: 50px;
+    flex-direction:row;
+    justify-content:space-around;
+}
+
+.htmx-settling .panel-content {
+  opacity: 0;
+}
+
+.panel {
+    background-color: white;
+    width: 500px;
+    height: 600px;
+    margin:10px;
+    display:flex;
+    justify-content:center;
+}
+
+.panel-content {
+    transition: opacity 300ms ease-in;
+    width: 100%;
+    
+}
+
+.panel-title {
+    display:flex;
+    justify-content: center;
+    width:100%;
+}
+
