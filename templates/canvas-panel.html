@@ -1,13 +1,18 @@
 
 <div class="panel-content" id="canvas-todo"> 
     <div class="panel-title">
-        <h4>Workflowy TODO</h1>
+        <h4>Pending Assignments</h1>
         <div class="panel-title-refresh">
-            <button hx-get="/canvas/todo" hx-target="#workflowy-todo" hx-swap="outerHTML">
+            <button hx-get="/canvas/todo" hx-target="#canvas-todo" hx-swap="outerHTML">
                 Refresh
             </button>
         </div>
     </div>
+
+    <div hx-get="/static/toggle-list-button.html" hx-trigger="load">
+    </div>
+
+
     {% if message  %}
     <div class="alert-message">
 

@@ -1,0 +1,26 @@
+<form id="course-toggle-list-form"
+        hx-post="/canvas/setcourses"
+      hx-swap="outerHTML">
+    <button
+            type="submit"
+            >
+            Confirm
+    </button><br>
+    
+
+    {% for course in courses %}
+
+    <input 
+        name="{{ course['id'] }}" 
+        type="checkbox"
+        {% if course['id'] in sel_courses %}
+            checked
+        {% endif %}
+        >
+        {{course['name']}}
+
+    </input><br>
+
+    {% endfor %}
+
+</form>

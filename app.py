@@ -1,11 +1,13 @@
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, send_file, request, make_response
 import requests
 from dotenv import find_dotenv, load_dotenv
 import os
+import json
 
 load_dotenv(find_dotenv())
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def main_page():
@@ -53,6 +55,84 @@ def wf_todo():
             return render_template('workflowy-panel.html', todo_list=todo_list)
     return render_template('workflowy-panel.html', message='Error: no "TODO" node in workflowy')
 
+@app.route("/canvas/todo")
+def canv_todo():
+    try:
+        selected_courses = json.loads(request.cookies.get("selected_courses"))
+    except:
+        selected_courses = []
+
+    return render_template('canvas-panel.html', message='Error: not implemented') 
+
+
+@app.route("/canvas/setcourses", methods=["POST"])
+def canv_set_courses():
+
+    dictr = request.form.to_dict()
+    
+    selected_courses = []
+    for course_id, course_enabled in dictr.items():
+        if course_enabled == "on":
+            selected_courses.append(course_id)
+
+    print("Selected Courses:")
+    print(selected_courses)
+        
+    resp = make_response("""
+        <div hx-get="/static/toggle-list-button.html" hx-trigger="load"></div>
+    """)
+
+    resp.set_cookie("selected_courses", json.dumps(selected_courses))
+
+    return resp
+
+
+@app.route("/canvas/coursetoggle")
+def canv_courses():
+
+    query = """
+    {
+          allCourses {
+            id
+            name
+            term {
+                name 
+            }
+          }
+    }
+    """
+    variables = ""
+
+    r = requests.post(url='https://sjsu.instructure.com/api/graphql',
+        json={"query": query},
+        headers= {
+            'Authorization': 'Bearer ' + os.environ.get("CANVAS_API")
+        }
+
+    )
+
+    jresp = r.json()
+
+    all_courses = jresp['data']['allCourses']
+
+    def course_filter(course):
+        return course['term']['name'] == "Fall 2025"
+            
+
+    filtered_courses = filter(course_filter,all_courses )
+
+    try:
+        selected_courses = json.loads(request.cookies.get("selected_courses"))
+    except:
+        selected_courses = []
+    if selected_courses is None:
+        selected_courses = []
+
+    return render_template('canvas-course-toggle.html', courses=filtered_courses, sel_courses=selected_courses)
+
+    # if response:
+      #      return render_template('workflowy-panel.html', todo_list=todo_list)
+
 @app.route("/workflowy/expandnode")
 def wf_expand():
     text = "parent_id=" + request.data["node_id"]
@@ -63,7 +143,7 @@ def wf_expand():
             'Content-type': 'ascii'
         })
                   
-
+    
 
     # print(node['id'])
     resp2 = r2.json();

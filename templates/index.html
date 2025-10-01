@@ -14,8 +14,8 @@
         <div class="center-horizontal">
         
             <div class="resizing-box">
-                <div class="left-panel panel">
-                    <h1>Pending Assignments</h1>
+                <div class="left-panel panel" hx-get="/canvas/todo" hx-trigger="load">  
+                    <img alt="Result loading..." class="htmx-indicator" width="150" src="/static/bars.svg"/>
                 </div>
                 <div class="right-panel panel" hx-get="/workflowy/todo" hx-trigger="load">  
                     <img alt="Result loading..." class="htmx-indicator" width="150" src="/static/bars.svg"/>
