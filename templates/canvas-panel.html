@@ -1,8 +1,9 @@
-<div class="panel-content" id="workflowy-todo"> 
+
+<div class="panel-content" id="canvas-todo"> 
     <div class="panel-title">
         <h4>Workflowy TODO</h1>
         <div class="panel-title-refresh">
-            <button hx-get="/workflowy/todo" hx-target="#workflowy-todo" hx-swap="outerHTML">
+            <button hx-get="/canvas/todo" hx-target="#workflowy-todo" hx-swap="outerHTML">
                 Refresh
             </button>
         </div>
@@ -16,9 +17,7 @@
     <ul>
         {% for item in todo_list %}
         <li>
-            <a href="https://workflowy.com/#/{{ item['id'][(item['id'].rfind('-') + 1):] }}">
             {{item["name"]}}
-            </a>
         </li>
         {% endfor %}
     </ul>

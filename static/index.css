@@ -25,7 +25,8 @@ body {
 }
 
 .panel {
-    background-color: white;
+    border-radius: 20px;
+    background-color: #eeeeee;
     width: 500px;
     height: 600px;
     margin:10px;
@@ -39,9 +40,35 @@ body {
     
 }
 
+.panel-title > .panel-title-refresh {
+    margin-left: 10px;
+    display:flex;
+    align-items:center;
+    
+}
+.panel-title > .panel-title-refresh > button {
+    background-color: #b2dEf1;
+    border: 1px solid #729EA1;
+    border-radius: 5px;
+    color: black;
+}
+.panel-title > .panel-title-refresh > button:hover {
+    background-color: #f2fef1;
+    border: 1px solid black;
+}
+
 .panel-title {
     display:flex;
     justify-content: center;
     width:100%;
 }
 
+.alert-message {
+    display:flex;
+    width: 100%;
+    background-color: #eecccc;
+    border: 2px solid black;
+    border-radius: 15px;
+    align-items: center;
+    justify-content:center;
+}
