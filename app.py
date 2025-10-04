@@ -3,6 +3,7 @@ import requests
 from dotenv import find_dotenv, load_dotenv
 import os
 import json
+import re
 
 load_dotenv(find_dotenv())
 
@@ -115,11 +116,35 @@ def canv_courses():
 
     all_courses = jresp['data']['allCourses']
 
-    def course_filter(course):
-        return course['term']['name'] == "Fall 2025"
-            
+    try: 
+        selected_term = request.values.get('term')
+        if selected_term is None: 
+            selected_term = json.loads(request.cookies.get("selected_term"))
+    except:
+        selected_term = "Fall 2025"
 
-    filtered_courses = filter(course_filter,all_courses )
+    termlist = []
+    for course in all_courses:
+        if str(course['term']['name']) not in termlist:
+             termlist.append(str(course['term']['name']))
+             print("appending: ", str(course['term']['name']))
+
+
+
+    def course_filter(course):
+        return course['term']['name'] == selected_term
+           
+        
+    season_order = {"Spring": 1, "Summer": 2, "Fall": 3, "Winter": 4}
+    def semester_key(s):
+        if not bool(re.fullmatch(r'(Spring|Summer|Fall|Winter)\s\d{4}', s)):
+            return (0, 0)
+        season, year = s.split()
+        print(season, " : ", year)
+        return (int(year), season_order[season])
+
+    filtered_courses = filter(course_filter,all_courses)
+    termlist = sorted(termlist, key=semester_key)
 
     try:
         selected_courses = json.loads(request.cookies.get("selected_courses"))
@@ -128,7 +153,14 @@ def canv_courses():
     if selected_courses is None:
         selected_courses = []
 
-    return render_template('canvas-course-toggle.html', courses=filtered_courses, sel_courses=selected_courses)
+    resp = make_response(render_template('canvas-course-toggle.html', 
+                           courses=filtered_courses, 
+                           sel_courses=selected_courses,
+                           terms=termlist,
+                           selected_term=selected_term))
+
+    resp.set_cookie("selected_term", selected_term)
+    return resp
 
     # if response:
       #      return render_template('workflowy-panel.html', todo_list=todo_list)

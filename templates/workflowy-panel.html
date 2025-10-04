@@ -1,6 +1,15 @@
 <div class="panel-content" id="workflowy-todo"> 
     <div class="panel-title">
-        <h4>Workflowy TODO</h1>
+        <a href="https://workflowy.com">
+            <img 
+                src="/static/icons/workflowy-logo-1.png"
+                width=50
+                height=50
+                >
+        </a>
+        <a href="https://workflowy.com">
+            <h4>Workflowy TODO</h1>
+        </a>
         <div class="panel-title-refresh">
             <button hx-get="/workflowy/todo" hx-target="#workflowy-todo" hx-swap="outerHTML">
                 Refresh

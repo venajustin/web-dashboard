@@ -5,7 +5,25 @@
             type="submit"
             >
             Confirm
-    </button><br>
+    </button>
+    <select
+        name="term" 
+        id="term-dropdown" 
+        hx-get="/canvas/coursetoggle"
+        hx-target="#course-toggle-list-form"
+        hx-swap="outerHTML"
+        >
+        {% for term in terms %}
+
+        <option value="{{ term }}"
+                {% if term == selected_term %}
+                    selected
+                {% endif %}
+        >{{ term }}</option>
+
+        {% endfor %}
+    </select>
+        <br>
     
 
     {% for course in courses %}
